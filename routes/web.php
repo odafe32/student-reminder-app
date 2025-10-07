@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::get('/dashboard', 'showDashboard')->name('dashboard');
+            Route::get('/profile', 'showProfile')->name('profile');
         });
     });
 
@@ -44,6 +45,16 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
         Route::controller(StudentController::class)->group(function () {
             Route::get('/dashboard', 'showDashboard')->name('dashboard');
+            Route::get('/profile', 'showProfile')->name('profile');
+            Route::post('/profile', 'updateProfile')->name('profile.update');
+            
+            // Task routes
+            Route::get('/calendar', 'showCalendar')->name('calendar');
+            Route::get('/tasks', 'showTasks')->name('tasks');
+            Route::post('/tasks', 'storeTask')->name('tasks.store');
+            Route::put('/tasks/{task}', 'updateTask')->name('tasks.update');
+            Route::patch('/tasks/{task}/status', 'updateTaskStatus')->name('tasks.status');
+            Route::delete('/tasks/{task}', 'deleteTask')->name('tasks.delete');
         });
     });
 });
