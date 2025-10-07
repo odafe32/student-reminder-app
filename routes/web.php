@@ -38,7 +38,28 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::controller(AdminController::class)->group(function () {
             Route::get('/dashboard', 'showDashboard')->name('dashboard');
+
+            // User Management
+            Route::get('/users', 'showUsers')->name('users');
+            Route::post('/users', 'storeUser')->name('users.store');
+            Route::get('/users/{user}', 'showUser')->name('users.show');
+            Route::put('/users/{user}', 'updateUser')->name('users.update');
+            Route::delete('/users/{user}', 'deleteUser')->name('users.delete');
+            Route::patch('/users/{user}/status', 'updateUserStatus')->name('users.status');
+
+            // Task Management
+            Route::get('/tasks', 'showTasks')->name('tasks');
+            Route::get('/tasks/{task}', 'showTask')->name('tasks.show');
+            Route::delete('/tasks/{task}', 'deleteTask')->name('tasks.delete');
+
+            // Profile
             Route::get('/profile', 'showProfile')->name('profile');
+            Route::put('/profile', 'updateProfile')->name('profile.update');
+
+            // Notification routes
+            Route::get('/notifications', 'showNotifications')->name('notifications');
+            Route::patch('/notifications/{notification}/read', 'markNotificationAsRead')->name('notifications.read');
+            Route::patch('/notifications/mark-all-read', 'markAllNotificationsAsRead')->name('notifications.mark-all-read');
         });
     });
 

@@ -1,3 +1,6 @@
+@extends('layouts.admin')
+
+@section('content')
 
 <div class="container-fluid py-4">
     <!-- Header -->
@@ -7,14 +10,6 @@
                 <div>
                     <h1 class="h3 mb-1">Admin Dashboard</h1>
                     <p class="text-muted mb-0">System overview and management</p>
-                </div>
-                <div>
-                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
-                        @csrf
-                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                            <i class="fas fa-sign-out-alt me-1"></i> Logout
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -74,8 +69,8 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Recent Users</h5>
-                    <a href="#" class="btn btn-primary btn-sm">
-                        <i class="fas fa-plus me-1"></i> Add User
+                    <a href="{{ route('admin.users') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus me-1"></i> Manage Users
                     </a>
                 </div>
                 <div class="card-body">
@@ -124,12 +119,14 @@
                                         <td>{{ $user->created_at->format('M j, Y') }}</td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-primary btn-sm">
+                                                <a href="{{ route('admin.users.show', $user) }}" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                    view
+                                                </a>
+                                                <a href="#" class="btn btn-outline-secondary btn-sm" onclick="editUser({{ $user->id }})">
                                                     <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-outline-danger btn-sm">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                    edit
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -178,21 +175,23 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary btn-sm">
-                            <i class="fas fa-user-plus me-1"></i> Add New User
-                        </button>
-                        <button class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-users me-1"></i> Manage Users
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm">
-                            <i class="fas fa-cog me-1"></i> System Settings
-                        </button>
-                        <button class="btn btn-outline-info btn-sm">
-                            <i class="fas fa-chart-bar me-1"></i> View Reports
-                        </button>
+                        <a href="{{ route('admin.users') }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-user-plus me-1"></i> Manage Users
+                        </a>
+                        <a href="{{ route('admin.tasks') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-tasks me-1"></i> View Tasks
+                        </a>
+                        <a href="{{ route('admin.profile') }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-user-cog me-1"></i> Profile Settings
+                        </a>
+                        <a href="{{ route('admin.notifications') }}" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-bell me-1"></i> Notifications
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@endsection
