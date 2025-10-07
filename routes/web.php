@@ -3,13 +3,12 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\WelcomeController;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Route;
 
-// Redirect root to login
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Landing page (accessible to everyone)
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 // Guest Routes Group (only accessible when NOT logged in)
 Route::middleware('guest')->group(function () {
