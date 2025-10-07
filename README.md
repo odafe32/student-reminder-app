@@ -206,4 +206,4 @@ This project is licensed under the MIT License - see the [LICENSE](https://opens
 
 ---
 
-<p align="center">Built with ❤️ for students, by a student</p>
+<p align="center">Built with ❤️ for students, by Odafe Godfrey</p>
