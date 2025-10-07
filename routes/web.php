@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Route;
 
 // Redirect root to login
@@ -55,6 +56,11 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/tasks/{task}', 'updateTask')->name('tasks.update');
             Route::patch('/tasks/{task}/status', 'updateTaskStatus')->name('tasks.status');
             Route::delete('/tasks/{task}', 'deleteTask')->name('tasks.delete');
+
+            // Notification routes
+            Route::get('/notifications', 'showNotifications')->name('notifications');
+            Route::patch('/notifications/{notification}/read', 'markNotificationAsRead')->name('notifications.read');
+            Route::patch('/notifications/mark-all-read', 'markAllNotificationsAsRead')->name('notifications.mark-all-read');
         });
     });
 });

@@ -5,11 +5,11 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>{{ $meta_title ?? 'UTHS Student Reminder System' }}</title>
+    <title>{{ $meta_title ?? 'Hando Student Reminder System' }}</title>
 
     <!-- Meta -->
-    <meta name="description" content="UTHS Student Reminder System – manage lectures, assignments, and academic reminders all in one place.">
-    <meta name="author" content="UTHS Student Reminder System" />
+    <meta name="description" content="Hando Student Reminder System – manage lectures, assignments, and academic reminders all in one place.">
+    <meta name="author" content="Hando Student Reminder System" />
     <meta property="og:type" content="website" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 

@@ -306,7 +306,6 @@
                                         </button>
                                     </div>
                                 </form>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -343,7 +342,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const reader = new FileReader();
             reader.onload = function(e) {
                 // Update preview in form
-                avatarPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="rounded-circle" width="60" height="60" style="object-fit: cover;">`;
+                if (avatarPreview) {
+                    avatarPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="rounded-circle" width="60" height="60" style="object-fit: cover;">`;
+                }
                 
                 // Update main avatar display
                 if (currentAvatar) {

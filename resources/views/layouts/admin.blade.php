@@ -5,11 +5,11 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>{{ $meta_title ?? 'Hando Student Reminder System' }}</title>
+    <title>{{ $meta_title ?? 'Admin - Hando Student Reminder System' }}</title>
 
     <!-- Meta -->
-    <meta name="description" content="Hando Student Reminder System – manage lectures, assignments, and academic reminders all in one place.">
-    <meta name="author" content="Hando Student Reminder System" />
+    <meta name="description" content="Admin Panel - Hando Student Reminder System – manage users, tasks, and system settings.">
+    <meta name="author" content="Hando Admin Panel" />
     <meta property="og:type" content="website" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
@@ -95,7 +95,7 @@
                                 </button>
                             </li>
                             <li class="d-none d-lg-block">
-                                <h5 class="mb-0">Good {{ date('H') < 12 ? 'Morning' : (date('H') < 18 ? 'Afternoon' : 'Evening') }}, {{ auth()->user()->name ?? 'Guest' }}</h5>
+                                <h5 class="mb-0">Good {{ date('H') < 12 ? 'Morning' : (date('H') < 18 ? 'Afternoon' : 'Evening') }}, Admin {{ auth()->user()->name ?? 'Admin' }}</h5>
                             </li>
                         </ul>
 
@@ -115,7 +115,7 @@
                                     <!-- item-->
                                     <div class="dropdown-item noti-title">
                                         <h5 class="m-0">
-                                            <span class="float-end"><a href="{{ route('student.notifications') }}" class="text-dark"><small>View All</small></a></span>Notifications
+                                            <span class="float-end"><a href="{{ route('admin.notifications') }}" class="text-dark"><small>View All</small></a></span>Notifications
                                         </h5>
                                     </div>
 
@@ -150,7 +150,7 @@
                                     </div>
 
                                     <!-- All-->
-                                    <a href="{{ route('student.notifications') }}" class="dropdown-item text-center text-primary notify-item notify-all">
+                                    <a href="{{ route('admin.notifications') }}" class="dropdown-item text-center text-primary notify-item notify-all">
                                         View all notifications
                                         <i class="fe-arrow-right"></i>
                                     </a>
@@ -160,7 +160,7 @@
                             <li class="dropdown notification-list topbar-dropdown">
                                 <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                     @if(auth()->user()->avatar)
-                                        <img src="{{ asset('storage/' . auth()->user()->avatar) }}" 
+                                        <img src="{{ asset('storage/' . auth()->user()->avatar) }}"
                                              alt="user-image" class="rounded-circle user-avatar" />
                                     @else
                                         <div class="bg-primary rounded-circle text-white user-avatar-placeholder">
@@ -168,7 +168,7 @@
                                         </div>
                                     @endif
                                     <span class="pro-user-name ms-1">
-                                        {{ auth()->user()->name ?? 'User' }} 
+                                        {{ auth()->user()->name ?? 'Admin' }}
                                         <i class="mdi mdi-chevron-down"></i>
                                     </span>
                                 </a>
@@ -179,7 +179,7 @@
                                     </div>
 
                                     <!-- item-->
-                                    <a class='dropdown-item notify-item' href="{{ route('student.profile') }}">
+                                    <a class='dropdown-item notify-item' href="{{ route('admin.profile') }}">
                                         <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
                                         <span>My Account</span>
                                     </a>
@@ -212,7 +212,7 @@
                     <div id="sidebar-menu">
 
                         <div class="logo-box">
-                            <a class='logo logo-light' href="{{ route('student.dashboard') }}">
+                            <a class='logo logo-light' href="{{ route('admin.dashboard') }}">
                                 <span class="logo-sm">
                                     <img src="{{ url('assets/images/logo-sm.png') }}" alt="" height="22">
                                 </span>
@@ -220,7 +220,7 @@
                                     <img src="{{ url('assets/images/logo-light.png') }}" alt="" height="24">
                                 </span>
                             </a>
-                            <a class='logo logo-dark' href="{{ route('student.dashboard') }}">
+                            <a class='logo logo-dark' href="{{ route('admin.dashboard') }}">
                                 <span class="logo-sm">
                                     <img src="{{ url('assets/images/logo-sm.png') }}" alt="" height="22">
                                 </span>
@@ -230,40 +230,40 @@
                             </a>
                         </div>
 <ul id="side-menu">
-    <li class="menu-title">Menu</li>
+    <li class="menu-title">Admin Panel</li>
 
     <li>
-        <a href="{{ route('student.dashboard') }}">
+        <a href="{{ route('admin.dashboard') }}">
             <i data-feather="home"></i>
             <span> Dashboard </span>
         </a>
     </li>
 
-    <li class="menu-title">Pages</li>
+    <li class="menu-title">Management</li>
 
     <li>
-        <a class='tp-link' href="{{ route('student.tasks') }}">
-            <i data-feather="columns"></i>
-            <span> My Tasks List </span>
-        </a>
-    </li>
-
-    <li>
-        <a class='tp-link' href="{{ route('student.calendar') }}">
-            <i data-feather="calendar"></i>
-            <span> Calendar </span>
-        </a>
-    </li>
-
-    <li>
-        <a class='tp-link' href="{{ route('student.profile') }}">
+        <a class='tp-link' href="{{ route('admin.users') }}">
             <i data-feather="users"></i>
+            <span> Manage Users </span>
+        </a>
+    </li>
+
+    <li>
+        <a class='tp-link' href="{{ route('admin.tasks') }}">
+            <i data-feather="columns"></i>
+            <span> View Tasks & Reminders </span>
+        </a>
+    </li>
+
+    <li>
+        <a class='tp-link' href="{{ route('admin.profile') }}">
+            <i data-feather="user"></i>
             <span> Profile </span>
         </a>
     </li>
 
     <li>
-        <a class='tp-link' href="{{ route('student.notifications')}}">
+        <a class='tp-link' href="{{ route('admin.notifications')}}">
             <i data-feather="bell"></i>
             <span> Notifications </span>
         </a>
@@ -301,7 +301,7 @@
 
         <script>
         function markAsRead(notificationId) {
-            fetch('{{ route("student.notifications.read", ":id") }}'.replace(':id', notificationId), {
+            fetch('{{ route("admin.notifications.read", ":id") }}'.replace(':id', notificationId), {
                 method: 'PATCH',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -340,7 +340,7 @@
         }
 
         function updateNotificationBadge() {
-            fetch('{{ route("student.notifications") }}')
+            fetch('{{ route("admin.notifications") }}')
                 .then(response => response.text())
                 .then(html => {
                     // Extract unread count from the response

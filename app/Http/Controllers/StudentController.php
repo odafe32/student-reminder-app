@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\Notification;
+use App\Mail\TaskCreatedMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -119,7 +122,6 @@ class StudentController extends Controller
             'repeat_frequency' => 'required|in:none,daily,weekly,monthly,yearly',
             'priority' => 'required|in:low,medium,high',
             'email_notification' => 'boolean',
-            'sms_notification' => 'boolean',
             'in_app_notification' => 'boolean',
             'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,gif|max:5120', // 5MB max
         ]);
@@ -130,7 +132,19 @@ class StudentController extends Controller
             $validated['attachment'] = $attachmentPath;
         }
 
-        Auth::user()->tasks()->create($validated);
+        $task = Auth::user()->tasks()->create($validated);
+
+        // Send email notification if enabled
+        if ($task->email_notification && Auth::user()->email) {
+            try {
+                Mail::to(Auth::user()->email)->send(new TaskCreatedMail($task));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send task creation email', [
+                    'task_id' => $task->id,
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
 
         return back()->with('success', 'Task created successfully!');
     }
@@ -153,7 +167,6 @@ class StudentController extends Controller
             'priority' => 'required|in:low,medium,high',
             'status' => 'required|in:pending,in_progress,completed,overdue,cancelled',
             'email_notification' => 'boolean',
-            'sms_notification' => 'boolean',
             'in_app_notification' => 'boolean',
             'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,gif|max:5120',
             'remove_attachment' => 'nullable|boolean',
@@ -297,5 +310,64 @@ class StudentController extends Controller
         $user->update($validated);
 
         return back()->with('success', 'Profile updated successfully!');
+    }
+
+    public function showNotifications(Request $request)
+    {
+        $user = Auth::user();
+
+        // Get notifications with optional filters
+        $query = $user->notifications();
+
+        if ($request->filled('type') && $request->type !== 'all') {
+            $query->where('type', $request->type);
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status === 'unread') {
+                $query->unread();
+            } elseif ($request->status === 'read') {
+                $query->read();
+            }
+        }
+
+        $notifications = $query->paginate(15);
+
+        $viewData = [
+            'meta_title' => 'Notifications | Student Reminder System',
+            'meta_desc' => 'Student Reminder System',
+            'meta_image' => url('logo.png'),
+            'notifications' => $notifications,
+            'unreadCount' => $user->unreadNotifications()->count(),
+            'filters' => $request->only(['type', 'status']),
+        ];
+
+        return view('student.notifications', $viewData);
+    }
+
+    public function markNotificationAsRead(Notification $notification)
+    {
+        if ($notification->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $notification->markAsRead();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function markAllNotificationsAsRead()
+    {
+        $user = Auth::user();
+        $user->unreadNotifications()->update([
+            'is_read' => true,
+            'read_at' => now(),
+        ]);
+
+        if (request()->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return back()->with('success', 'All notifications marked as read!');
     }
 }

@@ -43,6 +43,18 @@ class User extends Authenticatable
         return $this->hasMany(Task::class);
     }
 
+    // Add notifications relationship
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class)->latest();
+    }
+
+    // Get unread notifications
+    public function unreadNotifications()
+    {
+        return $this->hasMany(Notification::class)->unread();
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
